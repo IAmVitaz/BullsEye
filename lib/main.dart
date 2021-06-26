@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:BullsEye/prompt.dart';
+import 'package:BullsEye/control.dart';
 
 void main() => runApp(BullsEyeApp());
 
 class BullsEyeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight
-    ]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     return MaterialApp(
       title: 'BullsEye',
       theme: ThemeData(primarySwatch: Colors.blue),
@@ -36,10 +36,8 @@ class _GamePageState extends State<GamePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            "Hello BullsEye",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
-          ),
+          Prompt(targetValue: 100),
+          Control(),
           TextButton(
               onPressed: () {
                 this._alertIsVisible = true;
