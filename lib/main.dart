@@ -1,7 +1,10 @@
+import 'package:BullsEye/score.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:BullsEye/prompt.dart';
 import 'package:BullsEye/control.dart';
+import 'package:BullsEye/score.dart';
+
 
 void main() => runApp(BullsEyeApp());
 
@@ -44,7 +47,8 @@ class _GamePageState extends State<GamePage> {
                 _showAlert(context);
                 print("Button Pressed");
               },
-              child: Text('Hit Me!', style: TextStyle(color: Colors.blue)))
+              child: Text('Hit Me!', style: TextStyle(color: Colors.blue))),
+          Score(totalScore: 99999, round: 999)
         ],
       ),
     ));
