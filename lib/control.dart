@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
+import 'package:BullsEye/gameModel.dart';
 
 class Control extends StatefulWidget {
-  Control({Key key}) : super(key: key);
+  Control({Key key, @required this.model}) : super(key: key);
+  final GameModel model;
 
   @override
   _ControlState createState() => _ControlState();
@@ -22,15 +23,15 @@ class _ControlState extends State<Control> {
         ),
         Expanded(
           child: Slider(
-          value: _currentValue,
-          onChanged: (newValue) {
-            setState(() {
-              _currentValue = newValue;
-              print(_currentValue);
-            });
-          },
-          min: 1.0,
-          max: 100.0,
+            value: widget.model.current.toDouble(),
+            onChanged: (newValue) {
+              setState(() {
+                _currentValue = newValue;
+                widget.model.current = newValue.toInt();
+              });
+            },
+            min: 1.0,
+            max: 100.0,
           ),
         ),
         Padding(
