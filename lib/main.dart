@@ -67,15 +67,9 @@ class _GamePageState extends State<GamePage> {
 
   int _pointsForCurrentRound() {
     int maximumScore = 100;
-    int difference;
-    int sliderValue = _model.current;
-    if (sliderValue > _model.target) {
-      difference = sliderValue - _model.target;
-    } else if (_model.target > sliderValue) {
-      difference = _model.target - sliderValue;
-    } else {
-      difference = 0;
-    }
+    int difference = _model.target - _model.current;
+    if (difference < 0) {
+      difference *= -1;
     return maximumScore - difference;
   }
 
