@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:BullsEye/score.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +38,7 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-    _model = GameModel(50);
+    _model = GameModel(Random().nextInt(100) + 1);
   }
 
   @override
@@ -47,7 +49,9 @@ class _GamePageState extends State<GamePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Prompt(targetValue: _model.target),
-          Control(model: _model,),
+          Control(
+            model: _model,
+          ),
           TextButton(
               onPressed: () {
                 this._alertIsVisible = true;
@@ -55,13 +59,24 @@ class _GamePageState extends State<GamePage> {
                 print("Button Pressed");
               },
               child: Text('Hit Me!', style: TextStyle(color: Colors.blue))),
-          Score(
-            totalScore: _model.totalScore, 
-            round: _model.round
-          ),
+          Score(totalScore: _model.totalScore, round: _model.round),
         ],
       ),
     ));
+  }
+
+  int _pointsForCurrentRound() {
+    int maximumScore = 100;
+    int difference;
+    int sliderValue = _model.current;
+    if (sliderValue > _model.target) {
+      difference = sliderValue - _model.target;
+    } else if (_model.target > sliderValue) {
+      difference = _model.target - sliderValue;
+    } else {
+      difference = 0;
+    }
+    return maximumScore - difference;
   }
 
   void _showAlert(BuildContext context) {
@@ -77,7 +92,8 @@ class _GamePageState extends State<GamePage> {
         builder: (BuildContext context) {
           return AlertDialog(
               title: Text("Hello there!"),
-              content: Text("The slider's value is ${_model.current}"),
+              content: Text("The slider's value is ${_model.current}.\n" +
+                  "Your scored ${_pointsForCurrentRound()} points this round."),
               actions: <Widget>[
                 okButton,
               ],
