@@ -56,7 +56,6 @@ class _GamePageState extends State<GamePage> {
               onPressed: () {
                 this._alertIsVisible = true;
                 _showAlert(context);
-                print("Button Pressed");
               },
               child: Text('Hit Me!', style: TextStyle(color: Colors.blue))),
           Score(totalScore: _model.totalScore, round: _model.round),
@@ -65,9 +64,11 @@ class _GamePageState extends State<GamePage> {
     ));
   }
 
+  int _sliderValue() => _model.current;
+
   int _pointsForCurrentRound() {
-    int maximumScore = 100;
-    int difference = (_model.target - _model.current).abs();
+    var maximumScore = 100;
+    var difference = (_model.target - _sliderValue()).abs();
     return maximumScore - difference;
   }
 
@@ -76,7 +77,11 @@ class _GamePageState extends State<GamePage> {
         onPressed: () {
           Navigator.of(context).pop();
           this._alertIsVisible = false;
-          print("Awesome pressed! $_alertIsVisible");
+          setState(() {
+            _model.totalScore += _pointsForCurrentRound();
+            _model.target = Random().nextInt(100) + 1;
+            _model.round += 1;
+          });
         },
         child: Text("Awesome"));
     showDialog(
@@ -84,7 +89,7 @@ class _GamePageState extends State<GamePage> {
         builder: (BuildContext context) {
           return AlertDialog(
               title: Text("Hello there!"),
-              content: Text("The slider's value is ${_model.current}.\n" +
+              content: Text("The slider's value is ${_sliderValue()}.\n" +
                   "Your scored ${_pointsForCurrentRound()} points this round."),
               actions: <Widget>[
                 okButton,
