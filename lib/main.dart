@@ -13,8 +13,11 @@ void main() => runApp(BullsEyeApp());
 class BullsEyeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft, 
+      DeviceOrientation.landscapeRight
+    ]);
+    SystemChrome.setEnabledSystemUIOverlays([]); //hide system bar on android
     return MaterialApp(
       title: 'BullsEye',
       theme: ThemeData(primarySwatch: Colors.blue),
@@ -43,29 +46,37 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Prompt(targetValue: _model.target),
-          Control(
-            model: _model,
-          ),
-          TextButton(
-              onPressed: () {
-                this._alertIsVisible = true;
-                _showAlert(context);
-              },
-              child: Text('Hit Me!', style: TextStyle(color: Colors.blue))),
-          Score(
-            totalScore: _model.totalScore, 
-            round: _model.round, 
-            onStartOver: _startNewGame,
-          )
-        ],
-      ),
-    ));
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          image: DecorationImage(
+              image: AssetImage("images/background.png"), fit: BoxFit.cover)),
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Prompt(targetValue: _model.target),
+                Control(
+                  model: _model,
+                ),
+                TextButton(
+                    onPressed: () {
+                      this._alertIsVisible = true;
+                      _showAlert(context);
+                    },
+                    child:
+                        Text('Hit Me!', style: TextStyle(color: Colors.blue))),
+                Score(
+                  totalScore: _model.totalScore,
+                  round: _model.round,
+                  onStartOver: _startNewGame,
+                )
+              ],
+            ),
+          )),
+    );
   }
 
   int _sliderValue() => _model.current;
