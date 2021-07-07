@@ -69,7 +69,12 @@ class _GamePageState extends State<GamePage> {
   int _pointsForCurrentRound() {
     var maximumScore = 100;
     var difference = _amountOff();
-    return maximumScore - difference;
+    var bonusScore = 0;
+    if (difference == 0)
+      bonusScore = 100;
+    else if (difference == 1) 
+      bonusScore = 50;
+    return maximumScore - difference + bonusScore;
   }
 
   void _showAlert(BuildContext context) {
@@ -98,7 +103,7 @@ class _GamePageState extends State<GamePage> {
         });
   }
 
-    int _amountOff() => (_model.target - _sliderValue()).abs();
+  int _amountOff() => (_model.target - _sliderValue()).abs();
 
   String _alertATitle() {
     var difference = _amountOff();
