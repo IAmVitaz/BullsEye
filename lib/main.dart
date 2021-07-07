@@ -38,7 +38,7 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-    _model = GameModel(Random().nextInt(100) + 1);
+    _model = GameModel(_newTargetValue());
   }
 
   @override
@@ -58,7 +58,11 @@ class _GamePageState extends State<GamePage> {
                 _showAlert(context);
               },
               child: Text('Hit Me!', style: TextStyle(color: Colors.blue))),
-          Score(totalScore: _model.totalScore, round: _model.round),
+          Score(
+            totalScore: _model.totalScore, 
+            round: _model.round, 
+            onStartOver: _startNewGame,
+          )
         ],
       ),
     ));
@@ -72,9 +76,19 @@ class _GamePageState extends State<GamePage> {
     var bonusScore = 0;
     if (difference == 0)
       bonusScore = 100;
-    else if (difference == 1) 
-      bonusScore = 50;
+    else if (difference == 1) bonusScore = 50;
     return maximumScore - difference + bonusScore;
+  }
+
+  int _newTargetValue() => Random().nextInt(100) + 1;
+
+  void _startNewGame() {
+    setState(() {
+      _model.totalScore = GameModel.SCORE_START;
+      _model.round = GameModel.ROUND_START;
+      _model.target = _newTargetValue();
+      _model.current = GameModel.SLIDER_START;
+    });
   }
 
   void _showAlert(BuildContext context) {
@@ -84,7 +98,7 @@ class _GamePageState extends State<GamePage> {
           this._alertIsVisible = false;
           setState(() {
             _model.totalScore += _pointsForCurrentRound();
-            _model.target = Random().nextInt(100) + 1;
+            _model.target = _newTargetValue();
             _model.round += 1;
           });
         },
