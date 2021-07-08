@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:BullsEye/gameModel.dart';
+import 'sliderthumbimage.dart';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
 
 class Control extends StatefulWidget {
   Control({Key key, @required this.model}) : super(key: key);
@@ -10,7 +14,25 @@ class Control extends StatefulWidget {
 }
 
 class _ControlState extends State<Control> {
-  double _currentValue = 50.0;
+  ui.Image _sliderImage;
+
+  Future<ui.Image> _load(String asset) async {
+    ByteData data = await rootBundle.load(asset);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return fi.image;
+  }
+
+
+  @override
+  void initState() {
+    _load("images/nub.png").then((image) {
+      setState(() {
+        _sliderImage = image;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +47,28 @@ class _ControlState extends State<Control> {
           ),
         ),
         Expanded(
-          child: Slider(
-            value: widget.model.current.toDouble(),
-            onChanged: (newValue) {
-              setState(() {
-                _currentValue = newValue;
-                widget.model.current = newValue.toInt();
-              });
-            },
-            min: 1.0,
-            max: 100.0,
+          child: SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              activeTrackColor: Colors.red[700],
+              inactiveTrackColor: Colors.red[700],
+              trackShape: RoundedRectSliderTrackShape(),
+              trackHeight: 8.0,
+              thumbColor: Colors.redAccent,
+              thumbShape: SliderThumbImage(_sliderImage),
+              overlayColor: Colors.red.withAlpha(32),
+              overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
+
+            ),
+            child: Slider(
+              value: widget.model.current.toDouble(),
+              onChanged: (newValue) {
+                setState(() {
+                  widget.model.current = newValue.toInt();
+                });
+              },
+              min: 1.0,
+              max: 100.0,
+            ),
           ),
         ),
         Padding(
