@@ -13,10 +13,8 @@ void main() => runApp(BullsEyeApp());
 class BullsEyeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft, 
-      DeviceOrientation.landscapeRight
-    ]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     SystemChrome.setEnabledSystemUIOverlays([]); //hide system bar on android
     return MaterialApp(
       title: 'BullsEye',
